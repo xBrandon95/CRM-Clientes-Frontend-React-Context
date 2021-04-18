@@ -62,13 +62,13 @@ const ClienteContextProvider = ({ children }) => {
   const nuevoCliente = async cliente => {
     try {
       const res = await clienteAxios.post('/clientes', cliente);
-      history.push('/');
-      await Swal.fire('Exito!!!', res.data.msg, 'success');
 
       dispatch({
         type: NUEVO_CLIENTE,
         payload: res.data.cliente,
       });
+      history.push('/');
+      await Swal.fire('Exito!!!', res.data.msg, 'success');
     } catch (error) {
       if (error.response) {
         Swal.fire({

@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ClienteItem from '../components/Clientes/ClienteItem';
+import Spinner from '../components/Spinner/Spinner';
 import { clienteContext } from '../context/clientes/ClienteContext';
 
 const Clientes = () => {
@@ -9,6 +10,8 @@ const Clientes = () => {
   useEffect(() => {
     obtenerClientes();
   }, []);
+
+  if (clientes.length === 0) return <Spinner />;
 
   return (
     <>

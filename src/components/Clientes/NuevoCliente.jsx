@@ -99,11 +99,7 @@ const NuevoCliente = () => {
         </div>
 
         <div className="enviar">
-          <input
-            type="submit"
-            className="btn btn-azul"
-            value="Agregar Cliente"
-          />
+          <input type="submit" className="btn btn-azul" value="Agregar" />
         </div>
       </form>
     </>
