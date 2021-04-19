@@ -1,18 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
+// import clienteAxios from '../../config/axios';
 import { productoContext } from '../../context/productos/ProductoContext';
 import useForm from '../../hooks/useForm';
 
 const EditarProducto = ({ match }) => {
-  const [producto, handleChange, setProducto] = useForm({
-    nombre: '',
-    precio: '',
-  });
-  const { nombre, precio } = producto;
-
   // Obtener el id del producto
   const { id } = match.params;
 
-  const { productoactual, actualizarProducto } = useContext(productoContext);
+  const [producto, handleChange, setProducto] = useForm({
+    nombre: '',
+    precio: '',
+    imagen: '',
+  });
+  const { nombre, precio } = producto;
+
+  const { obtenerProducto, actualizarProducto } = useContext(productoContext);
 
   // state para la imagen
   const [archivo, setArchivo] = useState('');
@@ -23,10 +25,20 @@ const EditarProducto = ({ match }) => {
   };
 
   useEffect(() => {
-    if (productoactual !== null) {
-      setProducto(productoactual);
-    }
-  }, [productoactual]);
+    const api = async () => {
+      const productoObtenido = await obtenerProducto(id);
+      setProducto(productoObtenido);
+    };
+
+    api();
+
+    // const consultarAPI = async () => {
+    //   const productoConsulta = await clienteAxios.get(`/productos/${id}`);
+    //   setProducto(productoConsulta.data);
+    // };
+
+    // consultarAPI();
+  }, []);
 
   // agregar nuevo producto
   // almacena el nuevo producto

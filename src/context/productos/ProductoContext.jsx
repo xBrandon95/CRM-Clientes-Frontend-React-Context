@@ -5,7 +5,6 @@ import productoReducer from './productoReducer';
 
 import {
   OBTENER_PRODUCTOS,
-  OBTENER_PRODUCTO,
   NUEVO_PRODUCTO,
   ACTUALIZAR_PRODUCTO,
   ELIMINAR_PRODUCTO,
@@ -53,11 +52,14 @@ const ProductoContextProvider = ({ children }) => {
     }
   };
 
-  const obtenerProducto = async producto => {
-    dispatch({
-      type: OBTENER_PRODUCTO,
-      payload: producto,
-    });
+  const obtenerProducto = async idProducto => {
+    try {
+      const res = await clienteAxios.get(`/productos/${idProducto}`);
+      console.log(res.data);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // agregar nuevo producto
@@ -149,6 +151,28 @@ const ProductoContextProvider = ({ children }) => {
     });
   };
 
+  // buscar producto
+  const buscarProducto = async nombreProducto => {
+    try {
+      const resultadoBusqueda = await clienteAxios.post(
+        `/productos/busqueda/${nombreProducto}`,
+      );
+
+      // si hay resultados agreagar al state
+      if (resultadoBusqueda.data[0]) {
+        console.log(resultadoBusqueda.data);
+      } else {
+        // no hay resultados mostrar alerta
+        Swal.fire({
+          icon: 'error',
+          title: 'No hay resultados',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <productoContext.Provider
       value={{
@@ -159,6 +183,7 @@ const ProductoContextProvider = ({ children }) => {
         nuevoProducto,
         actualizarProducto,
         eliminarProducto,
+        buscarProducto,
       }}
     >
       {children}

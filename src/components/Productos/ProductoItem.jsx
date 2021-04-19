@@ -1,20 +1,12 @@
 import { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { productoContext } from '../../context/productos/ProductoContext';
 
 const ProductoItem = ({ producto }) => {
   const { _id, nombre, precio, imagen } = producto;
 
   // obteninedo valores del state
-  const { obtenerProducto, eliminarProducto } = useContext(productoContext);
-
-  // useHistory
-  const history = useHistory();
-
-  const clickEditarProducto = productoActual => {
-    obtenerProducto(productoActual);
-    history.push(`/productos/editar/${productoActual._id}`);
-  };
+  const { eliminarProducto } = useContext(productoContext);
 
   return (
     <li className="producto">
@@ -24,14 +16,10 @@ const ProductoItem = ({ producto }) => {
         {imagen && <img src={`http://localhost:4000/${imagen}`} alt={nombre} />}
       </div>
       <div className="acciones">
-        <button
-          type="button"
-          className="btn btn-azul"
-          onClick={() => clickEditarProducto(producto)}
-        >
+        <Link to={`/productos/editar/${_id}`} className="btn btn-azul">
           <i className="fas fa-pen-alt" />
           Editar Producto
-        </button>
+        </Link>
         <button
           type="button"
           className="btn btn-rojo btn-eliminar"

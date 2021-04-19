@@ -13,6 +13,11 @@ const ClienteItem = ({ cliente }) => {
     history.push(`/clientes/editar/${clienteActual._id}`);
   };
 
+  const clickNuevoPedido = clienteActual => {
+    obtenerCliente(clienteActual);
+    history.push(`/pedidos/nuevo/${clienteActual._id}`);
+  };
+
   return (
     <li className="cliente">
       <div className="info-cliente">
@@ -32,6 +37,16 @@ const ClienteItem = ({ cliente }) => {
           <i className="fas fa-pen-alt" />
           Editar Cliente
         </button>
+
+        <button
+          type="button"
+          className="btn btn-amarillo"
+          onClick={() => clickNuevoPedido(cliente)}
+        >
+          <i className="fas fa-pen-alt" />
+          Nuevo Pedido
+        </button>
+
         <button
           type="button"
           className="btn btn-rojo btn-eliminar"
