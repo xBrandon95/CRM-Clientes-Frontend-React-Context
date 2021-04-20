@@ -2,7 +2,6 @@ import {
   ELIMINAR_PRODUCTO,
   NUEVO_PRODUCTO,
   ACTUALIZAR_PRODUCTO,
-  OBTENER_PRODUCTO,
   OBTENER_PRODUCTOS,
 } from '../../types';
 
@@ -12,12 +11,6 @@ const productoReducer = (state, action) => {
       return {
         ...state,
         productos: action.payload,
-      };
-
-    case OBTENER_PRODUCTO:
-      return {
-        ...state,
-        productoactual: action.payload,
       };
 
     case NUEVO_PRODUCTO:
@@ -41,6 +34,7 @@ const productoReducer = (state, action) => {
           producto => producto._id !== action.payload,
         ),
       };
+
     default:
       return state;
   }

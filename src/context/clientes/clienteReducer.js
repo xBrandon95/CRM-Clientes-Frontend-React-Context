@@ -1,5 +1,4 @@
 import {
-  OBTENER_CLIENTE,
   OBTENER_CLIENTES,
   ELIMINAR_CLIENTE,
   NUEVO_CLIENTE,
@@ -12,12 +11,6 @@ const clienteReducer = (state, action) => {
       return {
         ...state,
         clientes: action.payload,
-      };
-
-    case OBTENER_CLIENTE:
-      return {
-        ...state,
-        clienteactual: action.payload,
       };
 
     case NUEVO_CLIENTE:

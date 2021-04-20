@@ -15,16 +15,18 @@ const EditarCliente = ({ match }) => {
   });
   const { nombre, apellido, email, empresa, telefono } = cliente;
 
-  const { clienteactual } = useContext(clienteContext);
+  const { obtenerCliente } = useContext(clienteContext);
 
   // obteniendo id del cliente
   const idCliente = match.params.id;
 
   useEffect(() => {
-    if (clienteactual !== null) {
+    const consultarApi = async () => {
+      const clienteactual = await obtenerCliente(idCliente);
       setCliente(clienteactual);
-    }
-  }, [clienteactual]);
+    };
+    consultarApi();
+  }, []);
 
   // utilizando context
   const { editarCliente } = useContext(clienteContext);

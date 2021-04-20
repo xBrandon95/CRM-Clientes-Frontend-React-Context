@@ -25,19 +25,11 @@ const EditarProducto = ({ match }) => {
   };
 
   useEffect(() => {
-    const api = async () => {
-      const productoObtenido = await obtenerProducto(id);
-      setProducto(productoObtenido);
+    const consultarApi = async () => {
+      const productoactual = await obtenerProducto(id);
+      setProducto(productoactual);
     };
-
-    api();
-
-    // const consultarAPI = async () => {
-    //   const productoConsulta = await clienteAxios.get(`/productos/${id}`);
-    //   setProducto(productoConsulta.data);
-    // };
-
-    // consultarAPI();
+    consultarApi();
   }, []);
 
   // agregar nuevo producto
@@ -56,45 +48,47 @@ const EditarProducto = ({ match }) => {
   };
 
   return (
-    <form onSubmit={editarProducto}>
-      <legend>EDITAR PRODUCTO</legend>
-      <div className="campo">
-        <label>Nombre:</label>
-        <input
-          type="text"
-          placeholder="Nombre Producto"
-          name="nombre"
-          value={nombre}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="campo">
-        <label>Precio:</label>
-        <input
-          type="number"
-          name="precio"
-          min={0.0}
-          step="0.01"
-          placeholder="Precio"
-          value={precio}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="campo">
-        <label>Imagen:</label>
-        {producto.imagen && (
-          <img
-            src={`http://localhost:4000/${producto.imagen}`}
-            alt={nombre}
-            width="300"
+    <>
+      <form onSubmit={editarProducto}>
+        <legend>EDITAR PRODUCTO</legend>
+        <div className="campo">
+          <label>Nombre:</label>
+          <input
+            type="text"
+            placeholder="Nombre Producto"
+            name="nombre"
+            value={nombre}
+            onChange={handleChange}
           />
-        )}
-        <input type="file" name="imagen" onChange={leerArchivo} />
-      </div>
-      <div className="enviar">
-        <input type="submit" className="btn btn-azul" value="GUARDAR" />
-      </div>
-    </form>
+        </div>
+        <div className="campo">
+          <label>Precio:</label>
+          <input
+            type="number"
+            name="precio"
+            min={0.0}
+            step="0.01"
+            placeholder="Precio"
+            value={precio}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="campo">
+          <label>Imagen:</label>
+          {producto.imagen && (
+            <img
+              src={`http://localhost:4000/${producto.imagen}`}
+              alt={nombre}
+              width="300"
+            />
+          )}
+          <input type="file" name="imagen" onChange={leerArchivo} />
+        </div>
+        <div className="enviar">
+          <input type="submit" className="btn btn-azul" value="GUARDAR" />
+        </div>
+      </form>
+    </>
   );
 };
 

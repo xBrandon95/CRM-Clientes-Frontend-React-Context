@@ -1,20 +1,39 @@
-const PedidoItem = () => {
-  console.log('data');
+import { useContext } from 'react';
+import { pedidoContext } from '../../context/pedidos/PedidoContext';
+
+const PedidoItem = ({ item }) => {
+  const { _id, cliente, pedido, total } = item;
+  const { nombre, apellido } = cliente;
+
+  const { eliminarPedido } = useContext(pedidoContext);
+
   return (
-    <li>
-      <div className="texto-producto">
-        <p className="nombre">Macbook Pro</p>
-        <p className="precio">$250</p>
+    <li className="pedido">
+      <div className="info-pedido">
+        <p className="id">ID: {_id}</p>
+        <p className="nombre">Cliente: {`${nombre} ${apellido}`}</p>
+        <div className="articulos-pedido">
+          <p className="productos">Artículos Pedido: </p>
+          <ul>
+            {pedido.map(ped => (
+              <li key={_id + ped._id}>
+                <p>{ped.producto.nombre}</p>
+                <p>Precio: ${ped.producto.precio}</p>
+                <p>Cantidad: {ped.cantidad}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className="total">Total: ${total} </p>
       </div>
       <div className="acciones">
-        <div className="contenedor-cantidad">
-          <i className="fas fa-minus" />
-          <input type="text" name="cantidad" />
-          <i className="fas fa-plus" />
-        </div>
-        <button type="button" className="btn btn-rojo">
-          <i className="fas fa-minus-circle" />
-          Eliminar Producto
+        <button
+          type="button"
+          className="btn btn-rojo btn-eliminar"
+          onClick={() => eliminarPedido(_id)}
+        >
+          <i className="fas fa-times" />
+          Eliminar Pedido
         </button>
       </div>
     </li>

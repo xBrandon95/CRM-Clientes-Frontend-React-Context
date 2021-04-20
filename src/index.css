@@ -18,6 +18,8 @@ body {
   background-color: var(--grisClaro);
   font-size: 1.6rem;
   font-family: var(--fontTexto);
+  margin: 0;
+  padding: 0;
 }
 html {
   box-sizing: border-box;

@@ -5,7 +5,6 @@ import clienteReducer from './clienteReducer';
 import clienteAxios from '../../config/axios';
 import {
   OBTENER_CLIENTES,
-  OBTENER_CLIENTE,
   NUEVO_CLIENTE,
   ELIMINAR_CLIENTE,
   ACTUALIZAR_CLIENTE,
@@ -52,11 +51,13 @@ const ClienteContextProvider = ({ children }) => {
     }
   };
 
-  const obtenerCliente = async cliente => {
-    dispatch({
-      type: OBTENER_CLIENTE,
-      payload: cliente,
-    });
+  const obtenerCliente = async idCliente => {
+    try {
+      const cliente = await clienteAxios.get(`/clientes/${idCliente}`);
+      return cliente.data;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const nuevoCliente = async cliente => {
@@ -116,8 +117,8 @@ const ClienteContextProvider = ({ children }) => {
     }
   };
 
-  const eliminarCliente = idCliente => {
-    Swal.fire({
+  const eliminarCliente = async idCliente => {
+    const result = await Swal.fire({
       title: '¿Estás seguro?',
       text: 'Un cliente eliminado no se puede recuperar!',
       icon: 'warning',
@@ -126,26 +127,26 @@ const ClienteContextProvider = ({ children }) => {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, eliminar',
       cancelButtonText: 'Cancelar',
-    }).then(async result => {
-      if (result.value) {
-        try {
-          const res = await clienteAxios.delete(`/clientes/${idCliente}`);
-          dispatch({
-            type: ELIMINAR_CLIENTE,
-            payload: idCliente,
-          });
-
-          Swal.fire('Eliminado', res.data.msg, 'success');
-        } catch (error) {
-          console.log(error.response);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.response.data.msg,
-          });
-        }
-      }
     });
+
+    if (result.value) {
+      try {
+        const res = await clienteAxios.delete(`/clientes/${idCliente}`);
+        dispatch({
+          type: ELIMINAR_CLIENTE,
+          payload: idCliente,
+        });
+
+        Swal.fire('Eliminado', res.data.msg, 'success');
+      } catch (error) {
+        console.log(error.response);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.response.data.msg,
+        });
+      }
+    }
   };
 
   return (

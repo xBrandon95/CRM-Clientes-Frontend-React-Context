@@ -18,7 +18,6 @@ export const productoContext = createContext();
 const ProductoContextProvider = ({ children }) => {
   const initialState = {
     productos: [],
-    productoactual: null,
   };
 
   const history = useHistory();
@@ -54,9 +53,8 @@ const ProductoContextProvider = ({ children }) => {
 
   const obtenerProducto = async idProducto => {
     try {
-      const res = await clienteAxios.get(`/productos/${idProducto}`);
-      console.log(res.data);
-      return res.data;
+      const producto = await clienteAxios.get(`/productos/${idProducto}`);
+      return producto.data;
     } catch (error) {
       console.log(error);
     }
@@ -120,7 +118,7 @@ const ProductoContextProvider = ({ children }) => {
 
   // eliminamos un producto por id
   const eliminarProducto = async idProducto => {
-    Swal.fire({
+    const result = await Swal.fire({
       title: '¿Estás seguro?',
       text: 'Un producto eliminado no se puede recuperar!',
       icon: 'warning',
@@ -129,47 +127,25 @@ const ProductoContextProvider = ({ children }) => {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, eliminar',
       cancelButtonText: 'Cancelar',
-    }).then(async result => {
-      if (result.value) {
-        try {
-          const res = await clienteAxios.delete(`/productos/${idProducto}`);
-          dispatch({
-            type: ELIMINAR_PRODUCTO,
-            payload: idProducto,
-          });
-
-          Swal.fire('Eliminado', res.data.msg, 'success');
-        } catch (error) {
-          console.log(error.response);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.response.data.msg,
-          });
-        }
-      }
     });
-  };
 
-  // buscar producto
-  const buscarProducto = async nombreProducto => {
-    try {
-      const resultadoBusqueda = await clienteAxios.post(
-        `/productos/busqueda/${nombreProducto}`,
-      );
+    if (result.value) {
+      try {
+        const res = await clienteAxios.delete(`/productos/${idProducto}`);
+        dispatch({
+          type: ELIMINAR_PRODUCTO,
+          payload: idProducto,
+        });
 
-      // si hay resultados agreagar al state
-      if (resultadoBusqueda.data[0]) {
-        console.log(resultadoBusqueda.data);
-      } else {
-        // no hay resultados mostrar alerta
+        Swal.fire('Eliminado', res.data.msg, 'success');
+      } catch (error) {
+        console.log(error.response);
         Swal.fire({
           icon: 'error',
-          title: 'No hay resultados',
+          title: 'Error',
+          text: error.response.data.msg,
         });
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -177,13 +153,12 @@ const ProductoContextProvider = ({ children }) => {
     <productoContext.Provider
       value={{
         productos: state.productos,
-        productoactual: state.productoactual,
+        // productoactual: state.productoactual,
         obtenerProductos,
         obtenerProducto,
         nuevoProducto,
         actualizarProducto,
         eliminarProducto,
-        buscarProducto,
       }}
     >
       {children}

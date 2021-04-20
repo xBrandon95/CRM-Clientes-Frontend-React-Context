@@ -1,41 +1,69 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { clienteContext } from '../../context/clientes/ClienteContext';
-import BuscadorProducto from './BuscadorProducto';
-import PedidoItem from './PedidoItem';
+import { pedidoContext } from '../../context/pedidos/PedidoContext';
+import FormBuscadorProducto from './FormBuscadorProducto';
+import FormCandidadProducto from './FormCantidadProducto';
 
-const NuevoPedido = () => {
-  const { clienteactual } = useContext(clienteContext);
+const NuevoPedido = ({ match }) => {
+  // extraer el ID del cliente
+  const { id } = match.params;
+
+  // state cliente
+  const [cliente, setCliente] = useState({});
+
+  const { obtenerCliente } = useContext(clienteContext);
+  const { busqueda, total, agregarPedido } = useContext(pedidoContext);
+
+  useEffect(() => {
+    const consultarApi = async () => {
+      const clienteactual = await obtenerCliente(id);
+      setCliente(clienteactual);
+    };
+    consultarApi();
+  }, []);
+
+  const realizarPedido = e => {
+    e.preventDefault();
+
+    const pedido = {
+      cliente: cliente._id,
+      pedido: busqueda,
+      total,
+    };
+
+    agregarPedido(pedido);
+  };
 
   return (
     <>
       <h2>Nuevo Pedido</h2>
       <div className="ficha-cliente">
         <h3>Datos de Cliente</h3>
-        <p>Nombre: {`${clienteactual.nombre} ${clienteactual.apellido}`}</p>
-        <p>Teléfono: {clienteactual.telefono}</p>
+        <p>Nombre: {`${cliente.nombre} ${cliente.apellido}`}</p>
+        <p>Teléfono: {cliente.telefono}</p>
       </div>
 
-      <BuscadorProducto />
+      <FormBuscadorProducto />
 
       <ul className="resumen">
-        <PedidoItem />
+        {busqueda.map(producto => (
+          <FormCandidadProducto key={producto._id} producto={producto} />
+        ))}
       </ul>
-      <div className="campo">
-        <label>Total:</label>
-        <input
-          type="number"
-          name="precio"
-          placeholder="Precio"
-          readOnly="readonly"
-        />
-      </div>
-      <div className="enviar">
-        <input
-          type="submit"
-          className="btn btn-azul"
-          defaultValue="Agregar Pedido"
-        />
-      </div>
+
+      <p className="total">
+        Total a Pagar: <span>${total}</span>
+      </p>
+
+      {total > 0 && (
+        <form onSubmit={realizarPedido}>
+          <input
+            type="submit"
+            className="btn btn-verde btn-block"
+            value="Realizar Pedido"
+          />
+        </form>
+      )}
     </>
   );
 };

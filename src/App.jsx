@@ -11,33 +11,36 @@ import ProductoContextProvider from './context/productos/ProductoContext';
 import NuevoProducto from './components/Productos/NuevoProducto';
 import EditarProducto from './components/Productos/EditarProducto';
 import NuevoPedido from './components/Pedidos/NuevoPedido';
+import PedidoContextProvider from './context/pedidos/PedidoContext';
 
 const App = () => (
   <Router>
     <ClienteContextProvider>
       <ProductoContextProvider>
-        <Layout>
-          <Switch>
-            <Route exact path="/" component={Clientes} />
-            <Route exact path="/clientes/nuevo" component={NuevoCliente} />
-            <Route
-              exact
-              path="/clientes/editar/:id"
-              component={EditarCliente}
-            />
+        <PedidoContextProvider>
+          <Layout>
+            <Switch>
+              <Route exact path="/" component={Clientes} />
+              <Route exact path="/clientes/nuevo" component={NuevoCliente} />
+              <Route
+                exact
+                path="/clientes/editar/:id"
+                component={EditarCliente}
+              />
 
-            <Route exact path="/productos" component={Productos} />
-            <Route exact path="/productos/nuevo" component={NuevoProducto} />
-            <Route
-              exact
-              path="/productos/editar/:id"
-              component={EditarProducto}
-            />
+              <Route exact path="/productos" component={Productos} />
+              <Route exact path="/productos/nuevo" component={NuevoProducto} />
+              <Route
+                exact
+                path="/productos/editar/:id"
+                component={EditarProducto}
+              />
 
-            <Route exact path="/pedidos" component={Pedidos} />
-            <Route exact path="/pedidos/nuevo/:id" component={NuevoPedido} />
-          </Switch>
-        </Layout>
+              <Route exact path="/pedidos" component={Pedidos} />
+              <Route exact path="/pedidos/nuevo/:id" component={NuevoPedido} />
+            </Switch>
+          </Layout>
+        </PedidoContextProvider>
       </ProductoContextProvider>
     </ClienteContextProvider>
   </Router>
