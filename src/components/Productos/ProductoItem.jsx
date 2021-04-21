@@ -13,7 +13,12 @@ const ProductoItem = ({ producto }) => {
       <div className="info-producto">
         <p className="nombre">{nombre}</p>
         <p className="precio">${precio}</p>
-        {imagen && <img src={`http://localhost:4000/${imagen}`} alt={nombre} />}
+        {imagen && (
+          <img
+            src={`${process.env.REACT_APP_BACKEND}/${imagen}`}
+            alt={nombre}
+          />
+        )}
       </div>
       <div className="acciones">
         <Link to={`/productos/editar/${_id}`} className="btn btn-azul">
